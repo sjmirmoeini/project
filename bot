@@ -1,0 +1,41 @@
+from bs4 import BeautifulSoup
+import requests
+import schedule
+
+def scrape(webAddress):
+    s = ''
+    page = requests.get(webAddress)
+
+    # Create a BeautifulSoup object
+    soup = BeautifulSoup(page.text, 'html.parser')
+    link = soup.findAll("table")
+    a = link[0].findAll("tr")
+    for i in a:
+        print(i.text)
+        s=s+i.text+"                 "
+    print("---=====-----")
+    return s
+#
+# def crawling(webAddress):
+#     s = ''
+#     page = requests.get(webAddress)
+#
+#     # Create a BeautifulSoup object
+#     soup = BeautifulSoup(page.text, 'html.parser')
+#     link = soup.findAll("table")
+#     a = link[0].findAll("tr")
+#     return a
+
+def send_message(chat_id, text):
+    '''
+    Takes the chat id of a telegram bot and the text that was  crawled from the
+    website and sends it to the bot
+    Args: chat_id = string; chat id of the telegram bot,
+          text = string; crawled text to be sent
+    Returns: None
+    '''
+    parameters = {'chat_id': chat_id, 'text': text}
+    message = requests.post('https://api.telegram.org/bot'+'757998111:AAEv5wkGTQLBqWgf5UmAwEj8pZOsiLRpm_Q/' + 'sendMessage', data=parameters)
+chat_id='@kung_fu_pandaaa'
+v=scrape('http://www.tsetmc.ir/')
+send_message('@kung_fu_pandaaa',v)
